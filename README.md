@@ -14,4 +14,4 @@ This is a simple parkour action system I designed for Unreal Engine 4 characters
 4. Extend the system by adding more parkour actions like vaulting and sliding.
 
 ## License:
-This script is free to use for personal and commercial projects. If you use this system, please credit the original author Tristan Martin.
+This script is free to use for personal and commercial projects. If you use this system, please credit the original author CrypticTM
