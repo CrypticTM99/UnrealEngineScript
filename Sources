@@ -1,0 +1,154 @@
+Source/ParkourActionSystem/ParkourCharacter.h
+#pragma once
+
+#include "CoreMinimal.h"
+#include "GameFramework/Character.h"
+#include "ParkourTypes.h"
+#include "ParkourCharacter.generated.h"
+
+UCLASS()
+class PARKOURACTIONSYSTEM_API AParkourCharacter : public ACharacter
+{
+    GENERATED_BODY()
+
+public:
+    AParkourCharacter();
+
+    UPROPERTY(BlueprintReadOnly, Category = "Parkour")
+    EParkourState CurrentParkourState;
+
+    void PerformParkour();
+
+protected:
+    virtual void BeginPlay() override;
+
+private:
+    void StartRunningParkour();
+    void StartClimbingParkour();
+    void PerformParkourJump();
+
+    void UpdateParkourState();
+
+    bool IsNearLedge() const;
+    bool IsNearWall() const;
+};
+Source/ParkourActionSystem/ParkourCharacter.cpp
+#include "ParkourCharacter.h"
+#include "ParkourActionSystemComponent.h"
+#include "ParkourInputComponent.h"
+#include "ParkourTypes.h"
+#include "GameFramework/Actor.h"
+#include "Kismet/KismetMathLibrary.h"
+
+AParkourCharacter::AParkourCharacter()
+{
+    PrimaryActorTick.bCanEverTick = true;
+    CurrentParkourState = EParkourState::None;
+}
+
+void AParkourCharacter::BeginPlay()
+{
+    Super::BeginPlay();
+}
+
+void AParkourCharacter::PerformParkour()
+{
+    if (IsNearWall() && CurrentParkourState == EParkourState::None)
+    {
+        StartRunningParkour();
+    }
+    else if (IsNearLedge() && CurrentParkourState == EParkourState::None)
+    {
+        StartClimbingParkour();
+    }
+    else
+    {
+        PerformParkourJump();
+    }
+}
+
+void AParkourCharacter::StartRunningParkour()
+{
+    CurrentParkourState = EParkourState::Running;
+    GetCharacterMovement()->MaxWalkSpeed *= 1.5f; // Boost speed
+    // Trigger animation and any other logic
+}
+
+void AParkourCharacter::StartClimbingParkour()
+{
+    CurrentParkourState = EParkourState::Climbing;
+    GetCharacterMovement()->GravityScale = 0.0f; // Stop gravity for climbing
+    // Trigger climbing animation and adjust character movement
+}
+
+void AParkourCharacter::PerformParkourJump()
+{
+    CurrentParkourState = EParkourState::Jumping;
+    LaunchCharacter(FVector(0, 0, 500), true); // Adjust for realistic jump height
+    // Trigger jumping animation
+}
+
+bool AParkourCharacter::IsNearLedge() const
+{
+    // Check for ledge proximity (example using line trace)
+    return true; // Placeholder
+}
+
+bool AParkourCharacter::IsNearWall() const
+{
+    // Check for wall proximity (example using line trace)
+    return true; // Placeholder
+}
+Source/ParkourActionSystem/ParkourTypes.h:
+#pragma once
+
+#include "CoreMinimal.h"
+#include "ParkourTypes.generated.h"
+
+UENUM(BlueprintType)
+enum class EParkourState : uint8
+{
+    None UMETA(DisplayName = "None"),
+    Running UMETA(DisplayName = "Running"),
+    Jumping UMETA(DisplayName = "Jumping"),
+    Climbing UMETA(DisplayName = "Climbing")
+};
+Content/ParkourAnimations/RunParkourAnim.uasset:
+Placeholder file for the running parkour animation.
+You can add your own animation here using Unreal Engine's animation system.
+Content/ParkourAnimations/ClimbParkourAnim.uasset:
+Placeholder file for the climbing parkour animation.
+You can add your own animation here using Unreal Engine's animation system.
+Content/ParkourAnimations/JumpParkourAnim.uasset:
+Placeholder file for the jumping parkour animation.
+You can add your own animation here using Unreal Engine's animation system.
+
+Source/ParkourActionSystem/ParkourInputComponent.h:
+#pragma once
+
+#include "CoreMinimal.h"
+#include "Components/InputComponent.h"
+#include "ParkourInputComponent.generated.h"
+
+UCLASS()
+class PARKOURACTIONSYSTEM_API UParkourInputComponent : public UInputComponent
+{
+    GENERATED_BODY()
+
+public:
+    virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+};
+
+Source/ParkourActionSystem/ParkourInputComponent.cpp
+#include "ParkourInputComponent.h"
+#include "ParkourCharacter.h"
+#include "GameFramework/PlayerController.h"
+
+void UParkourInputComponent::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
+{
+    Super::SetupPlayerInputComponent(PlayerInputComponent);
+
+    // Bind parkour actions to specific input keys
+    PlayerInputComponent->BindAction("Parkour", IE_Pressed, this, &UParkourInputComponent::PerformParkour);
+}
+
