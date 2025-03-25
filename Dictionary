@@ -1,0 +1,19 @@
+ParkourActionSystem/
+│
+├── Source/
+│   ├── ParkourActionSystem/
+│   │   ├── ParkourCharacter.cpp
+│   │   ├── ParkourCharacter.h
+│   │   ├── ParkourActionSystemComponent.cpp
+│   │   ├── ParkourActionSystemComponent.h
+│   │   ├── ParkourInputComponent.cpp
+│   │   ├── ParkourInputComponent.h
+│   │   └── ParkourTypes.h
+│
+├── Content/
+│   ├── ParkourAnimations/
+│   │   ├── RunParkourAnim.uasset
+│   │   ├── ClimbParkourAnim.uasset
+│   │   └── JumpParkourAnim.uasset
+│
+└── README.md
