@@ -1,0 +1,71 @@
+### **Parkour Action Script for Unreal Engine 4**
+
+**Overview:**
+
+This script implements a parkour system for an Unreal Engine 4 character, allowing the player to perform dynamic parkour actions like running along walls, climbing ledges, and jumping in a fluid and responsive manner. The system uses a state machine to handle the different parkour states (Running, Jumping, Climbing), and checks the character's environment (e.g., proximity to ledges or walls) to trigger the appropriate parkour actions.
+
+**Features:**
+- **State Machine:** Utilizes an `EParkourState` enum to manage different parkour states (None, Running, Jumping, Climbing).
+- **Efficient Detection:** Only triggers parkour actions when the character meets specific conditions (e.g., moving forward and being near a wall or ledge).
+- **Modular Logic:** The logic is divided into helper functions to improve maintainability and reusability.
+- **Animation Integration:** Placeholder functions to start running and climbing animations are included (should be integrated with your own Animation Blueprint).
+- **Movement Handling:** Adjustments to character movement and gravity allow smooth transitions between parkour actions.
+
+---
+
+### **Key Components:**
+
+1. **State Management:**
+   - `EParkourState`: Enum to define the current state of the parkour action (None, Running, Jumping, Climbing).
+   - Transitions between states are handled based on environmental conditions and user input.
+
+2. **Parkour Action Functions:**
+   - `PerformParkour()`: The main function that checks if parkour is possible based on the current conditions and triggers the appropriate state (Running, Climbing).
+   - `StartRunningParkour()`: Initiates the parkour running action, increasing movement speed and triggering the running animation.
+   - `StartClimbingParkour()`: Initiates the climbing action by adjusting gravity and transitioning to the climbing animation.
+   - `PerformParkourJump()`: Executes a jump action as part of the parkour system.
+
+3. **Environmental Checks:**
+   - `IsNearLedge()`: Detects if the character is near a ledge that can be climbed.
+   - `IsNearWall()`: Detects if the character is near a wall for performing wall-running or other parkour actions.
+   - These checks use `LineTraceSingleByChannel` to detect obstacles within a set distance and direction.
+
+4. **Character Movement Adjustments:**
+   - The character's `MaxWalkSpeed` is dynamically increased during parkour actions to simulate faster movement during wall-running.
+   - `GravityScale` is temporarily set to 0 when climbing to prevent the character from falling.
+
+---
+
+### **Usage:**
+
+1. **Input Setup:**
+   - Bind parkour actions to an input event (e.g., `"Parkour"`).
+   - The character can perform a parkour action when this input is pressed.
+
+2. **Animation Integration:**
+   - Integrate the corresponding animations (e.g., running, climbing) in your **Animation Blueprint**.
+   - Trigger the animations in the `StartRunningParkour()` and `StartClimbingParkour()` functions.
+
+3. **Extend Functionality:**
+   - Additional parkour actions such as vaulting, sliding, and wall-jumping can be added by expanding the state machine and adding more environmental checks.
+
+---
+
+### **Example Input Bindings:**
+
+In your project, bind parkour actions in the `SetupPlayerInputComponent()` method:
+
+```cpp
+PlayerInputComponent->BindAction("Parkour", IE_Pressed, this, &AYourGameCharacter::PerformParkour);
+```
+
+---
+
+### **Notes:**
+- This system is highly customizable. You can modify the environmental checks and add new actions such as vaulting or sliding.
+- Make sure to integrate this with your existing movement system, and adjust character movement settings like speed, gravity, and jump height as needed for your parkour mechanics.
+- The script currently assumes that you are familiar with the basic setup of Unreal Engine's `Character` class and Animation Blueprints.
+
+---
+
+CrypticTM - Script Author
